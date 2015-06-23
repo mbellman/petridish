@@ -45,13 +45,13 @@ var Organisms = {
     // Load all creatures from bank into an element
     // (initializing in random positions)
     place     : function(element) {
-        var w = element.width();
-        var h = element.height();
+        var w = element.width() - 20;
+        var h = element.height() - 20;
 
         for(var o = 0, t = this.creatures.length ; o < t ; o++) {
             this.creatures[o].el.css({
-                'top'  : Math.round( Math.random()*h ) + 'px',
-                'left' : Math.round( Math.random()*w ) + 'px'
+                'top'  : 10 + Math.round( Math.random()*h ) + 'px',
+                'left' : 10 + Math.round( Math.random()*w ) + 'px'
             });
 
             element.append( this.creatures[o].el );
