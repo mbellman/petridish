@@ -1,5 +1,7 @@
 // ------------------ VARIABLES ------------------
 
+var baseMutationRate = 2;       // Approximate rate of errant base transcriptions per 1000
+var geneSkipRate = 1;           // Approximate rate of gene skip per 1000
 
 // ------------------ EVENTS ---------------------
 $(document).ready(function(){
