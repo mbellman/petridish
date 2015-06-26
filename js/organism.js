@@ -144,13 +144,13 @@ var Organisms = {
         var w = element.width() - 20;
         var h = element.height() - 20;
 
-        for(var o = 0, t = this.creatures.length ; o < t ; o++) {
-            this.creatures[o].el.css({
+        for(c in this.creatures) {
+            this.creatures[c].el.css({
                 'top'  : 10 + Math.round( Math.random()*h ) + 'px',
                 'left' : 10 + Math.round( Math.random()*w ) + 'px'
             });
 
-            element.append( this.creatures[o].el );
+            element.append( this.creatures[c].el );
         }
     }
 }
