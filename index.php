@@ -8,6 +8,8 @@
         </style>
 
         <script src="js/jquery.min.js"></script>
+        <script src="js/ease.js"></script>
+
         <script src="js/organism.js"></script>
         <script src="js/simulate.js"></script>
         <script src="js/main.js"></script>
