@@ -6,7 +6,7 @@ var geneSkipRate = 1;           // Approximate rate of gene skip per 1000
 // ------------------ EVENTS ---------------------
 $(document).ready(function(){
     $('.dish').drag({
-        delay: 0.1
+        delay : 0.1
     });
 
     Organisms.generate(30);
@@ -14,18 +14,28 @@ $(document).ready(function(){
 });
 
 
-// ------------------ PLUGINS --------------------
+// ------------------ PLUGINS/TOOLS --------------
+function rand(low, high) {
+    return low + Math.floor( Math.random()*(high+1) );
+}
+
 $.fn.drag = function(params) {
     var _ = this;
 
-    var dragTimeout;            // Drag easing start timeout
-    var delayInterval;          // Easing interval for drag delay
-    var delay = 0;              // Drag delay in ms
+    var dragTimeout;                // Drag easing start timeout
+    var delayInterval;              // Easing interval for drag delay
+    var delay = 0;                  // Drag delay in ms
+
+    var ease = Ease.quad.out;       // Default easing function to use for delayed dragging
 
     if(!!params) {
         if(params.hasOwnProperty('delay')) {
             // Setting drag delay
             delay = params.delay*1000;
+        }
+
+        if(params.hasOwnProperty('ease')) {
+            ease = params.ease;
         }
     }
 
@@ -67,7 +77,7 @@ $.fn.drag = function(params) {
                         y : initial.y > goal.y ? -1 : 1
                     };
 
-                    // Restart ease interval
+                    // Reset ease interval
                     clearInterval(delayInterval);
 
                     // Start keeping track of update time (initial + current)
@@ -93,7 +103,7 @@ $.fn.drag = function(params) {
                         }
 
                         // Evaluate ease progress based on time
-                        var e = Ease.quad.out( mdt );
+                        var e = ease( mdt );
 
                         // Update position
                         _.css({

@@ -1,5 +1,38 @@
 // ---------------- Data structures ----------------
+/**
+ * Gene utilities
+ */
+var Gene = {
 
+    // Start codons which identify a gene's actual function. Genes
+    // which do not begin with any of these are effectively useless.
+    codons : {
+        AGT : 'CELL_COUNT',
+        AGC : 'BASAL_METABOLIC_RATE',
+        ATT : 'ENERGY_SOURCE',
+        ACT : 'HUNGER_THRESHOLD',
+        ACG : 'MOVEMENT_SPEED',
+        ATC : 'OPTIMAL_ENVIRONMENT_TEMPERATURE',
+        AGG : 'OPTIMAL_ENVIRONMENT_HUMIDITY',
+        ACC : 'OPTIMAL_ENVIRONMENT_GAS',
+        AAA : 'OPTIMAL_ENVIRONMENT_GAS_CONCENTRATION',
+        GCT : 'TEMPERATURE_TOLERANCE',
+        GGT : 'HUMIDITY_TOLERANCE',
+        GTT : 'DRUG_RESISTANCE',
+        GGC : 'VIRUS_RESISTANCE',
+        GGG : 'LIFE_EXPECTANCY',
+        GGG : 'SOCIABILITY'
+    },
+
+    // Generate a new gene at random from parameters
+    synthesize : function(options) {
+        return 'AAA';
+    }
+}
+
+/**
+ * Chromosome constructor + methods
+ */
 function Chromosome() {
     this.genes = [];
 }
@@ -62,6 +95,9 @@ function Cell() {
 }
 
 
+/**
+ * Organism constructor + methods
+ */
 function Organism() {
     // Biology
     this.genome = [];
@@ -78,8 +114,36 @@ function Organism() {
     this.mobility = 0;
 }
 
-Organism.prototype.spawn = function() {
+Organism.prototype.spawn = function(options) {
+    if(!!options) {
+        if(
+         typeof options.type       != 'undefined' &&
+         typeof options.complexity != 'undefined'
+        ) {
+            // Spawning a new organism based on parameters
 
+            switch(options.type) {
+                case 'single-celled':
+                    break;
+                case 'multi-celled':
+                    break;
+            }
+
+            // Generating chromosomes (one chromosome per level of complexity)
+            for(var c = 0 ; c < options.complexity ; c++) {
+                var chromosome = new Chromosome();
+                var geneCount  = this.complexity*3 + rand(0, this.complexity*2);
+
+                // Generating genes for this chromosome
+                // (# of genes influenced by complexity)
+                for(var g = 0 ; g < geneCount ; g++) {
+                    chromosome.addGene( Gene.synthesize() );
+                }
+
+                this.genome.push(chromosome);
+            }
+        }
+    }
 }
 
 Organism.prototype.reproduce = function() {
@@ -88,7 +152,9 @@ Organism.prototype.reproduce = function() {
 
 
 
-/* - Container object for the organism - */
+/**
+ * Container object for organisms
+ */
 function Creature() {
     this.entity;
     this.el;
@@ -110,7 +176,7 @@ Creature.prototype.create = function() {
 var bases = ['A', 'G', 'T', 'C'];
 
 function randomBase() {
-    return bases[ Math.round(Math.random() * (bases.length-1)) ];
+    return bases[ rand(0, bases.length-1) ];
 }
 
 function randomIdentifier() {
@@ -128,12 +194,16 @@ var Organisms = {
     generate  : function(number) {
         for(var n = 0 ; n < number ; n++) {
             var organism = new Organism();
-            organism.spawn();
+            organism.spawn({
+                type       : 'single-celled',
+                complexity : 1
+            });
 
             var identifier = randomIdentifier();
 
             var creature = new Creature();
-            creature.is(organism).create(identifier);
+            creature.is( organism ).create( identifier );
+
             this.creatures[identifier] = creature;
         }
     },
@@ -146,8 +216,8 @@ var Organisms = {
 
         for(c in this.creatures) {
             this.creatures[c].el.css({
-                'top'  : 10 + Math.round( Math.random()*h ) + 'px',
-                'left' : 10 + Math.round( Math.random()*w ) + 'px'
+                'top'  : 10 + rand(0, h) + 'px',
+                'left' : 10 + rand(0, w) + 'px'
             });
 
             element.append( this.creatures[c].el );
